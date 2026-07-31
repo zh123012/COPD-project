@@ -905,10 +905,36 @@ write.csv(dfa,file="rawdata.csv")
 dfa<-read.csv("rawdata.csv")
 dfa_clean <- clean(dfa)
 dfa_clean$WTSA2YR <- dfa_clean$serum_wt
-dfa_clean <- dfa_clean[, !names(dfa_clean) %in% c("MCQ160B", "MCQ160C", "MCQ160D", "MCQ160E", "MCQ160F","physical_act","WTMEC2YR","fe_wt","WTDR2D.x","WTDR2D.y","wbc","monocyte","lymphocyte","neutrophil","platelet","WTSA2YR","WTMEC2YR","WTDR2D","serum_wt")]
+dfa_clean <- dfa_clean[, !names(dfa_clean) %in% c("MCQ160B", "MCQ160C", "MCQ160D", "MCQ160E", "MCQ160F","physical_act","WTMEC2YR","fe_wt","WTDR2D.x","WTDR2D.y","wbc","monocyte","lymphocyte","neutrophil","platelet","WTSA2YR","WTMEC2YR","WTDR2D","serum_wt","X")]
 
 cat("删除后列数:", ncol(dfa_clean), "\n")
 cat("确认 MCQ160B-F 还存在吗:", any(c("MCQ160B","MCQ160C","MCQ160D","MCQ160E","MCQ160F","physical_act") %in% names(dfa_clean)), "\n")
+# dfa_clean 的列对应关系（按顺序）
+correct_names <- c(
+  "SEQN",            # SEQN → SEQN (already uppercase)
+  "Year",            # year → Year
+  "Serum_copper",    # serum_copper → Serum_copper
+  "Serum_selenium",  # serum_selenium → Serum_selenium
+  "Serum_zinc",      # serum_zinc → Serum_zinc
+  "Serum_iron",      # serum_iron → Serum_iron
+  "Gender",          # gender → Gender
+  "Age",             # age → Age
+  "Pregnant",        # pregnant → Pregnant
+  "Drinking",        # drinking → Drinking
+  "Smoking",         # smoking → Smoking
+  "BMI",             # BMI → BMI (no change)
+  "Sedentary_time",  # sedentary_time → Sedentary_time
+  "COPD",            # COPD → COPD (no change)
+  "Cancer",          # cancer → Cancer
+  "Diabetes",        # diabetes → Diabetes
+  "Hypertension",    # hypertension → Hypertension
+  "sdmvpsu",         # sdmvpsu → Sdmvpsu
+  "sdmvstra",        # sdmvstra → Sdmvstra
+  "CVD"              # CVD → CVD (no change)
+)
+
+names(dfa_clean) <- correct_names
+names(dfa_clean)
 plot_pattern(dfa_clean,npat = 3,rotate = T)
 ggsave("missing_pattern.png",width = 10,height = 6)
 # 指定变量及顺序
