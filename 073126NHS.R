@@ -938,9 +938,9 @@ names(dfa_clean)
 plot_pattern(dfa_clean,npat = 3,rotate = T)
 ggsave("missing_pattern.png",width = 10,height = 6)
 # 指定变量及顺序
-target_vars <- c("serum_copper", "serum_zinc", "serum_iron", "serum_selenium",
-                 "smoking", "drinking", "BMI", "sedentary_time",
-                 "CVD", "hypertension", "diabetes", "cancer", "COPD")
+target_vars <- c("Serum_copper", "Serum_zinc", "Serum_iron", "Serum_selenium",
+                 "Smoking", "Drinking", "BMI", "Sedentary_time",
+                 "CVD", "Hypertension", "Diabetes", "Cancer", "COPD")
 
 # 从 dfa_clean 提取缺失指示矩阵 (1=缺失, 0=不缺失)
 missing_mat <- as.data.frame(lapply(dfa_clean[target_vars], function(x) as.numeric(is.na(x))))
@@ -979,9 +979,25 @@ dr_serum<-dr_preg %>%
   filter(!(is.na(serum_copper)&is.na(serum_selenium)&is.na(serum_zinc)&is.na(serum_iron)))
 df_serum<-clean(dr_serum)
 summary(df_serum)
-write.csv(dr_serum,file = "dr_serum.csv")
+write.csv(df_serum,file = "df_serum.csv")
+df_serum <- read.csv("df_serum.csv")
 
-dr_serum <- read.csv("dr_serum.csv")
+target_vars_s <- c("serum_copper", "serum_zinc", "serum_iron", "serum_selenium",
+                 "smoking", "drinking", "BMI", "sedentary_time",
+                 "CVD", "hypertension", "diabetes", "cancer", "COPD")
+
+# 从 dr_serum 提取缺失指示矩阵 (1=缺失, 0=不缺失)
+missing_mat_s <- as.data.frame(lapply(df_serum[target_vars_s], function(x) as.numeric(is.na(x))))
+
+# 只保留有缺失的变量
+has_miss_s <- names(missing_mat_s)[colSums(missing_mat_s) > 0]
+missing_mat_s <- missing_mat_s[has_miss_s]
+
+miss_pct_s <- round(colSums(missing_mat_s) / nrow(missing_mat_s) * 100,2)
+cat("缺失比例:\n")
+print(miss_pct_s)
+write.csv(miss_pct_s, file = "missing_percentage.csv", row.names = TRUE)
+
 counts <- with(dr_serum, table(year, COPD))
 prevalence <- prop.table(counts, margin = 1)[,"1"] * 100
 pre<-data.frame(
