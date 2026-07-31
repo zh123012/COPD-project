@@ -1,0 +1,5 @@
+"Element","AUC","Threshold","Sensitivity","Specificity"
+"Serum copper",0.6248,123.3,0.5484,0.654
+"Serum zinc",0.5734,80.6,0.6641,0.4972
+"Serum selenium",0.5355,126.7,0.562,0.5533
+"Serum iron",0.5827,77,0.5772,0.5675
